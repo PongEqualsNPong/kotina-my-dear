@@ -15,6 +15,11 @@ class Greetings(commands.Cog):
         self.bot = bot
         self._last_member = None
 
+    @commands.command()
+    async def kill(self, ctx):
+        if ctx.channel.id == Channels.TEST.value:
+            await self.bot.logout()
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         roleMember = discord.utils.get(member.guild.roles, name=Roles.ROLE_MEMBER.value)
