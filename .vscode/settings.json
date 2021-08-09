@@ -1,0 +1,12 @@
+{
+    "python.languageServer": "Pylance",
+    "python.formatting.provider": "black",
+    "python.autoComplete.extraPaths": ["C:\\develop\\python\\kotina\\env\\Lib\\site-packages"],
+    "python.linting.pylintPath": "C:\\develop\\python\\kotina\\env\\Lib\\site-packages\\pylint",
+    "python.linting.enabled": true,
+    "python.analysis.extraPaths": [
+        "C:\\develop\\python\\kotina\\env\\Lib\\site-packages"
+    ]
+
+
+}
