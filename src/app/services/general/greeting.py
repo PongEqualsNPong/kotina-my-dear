@@ -57,8 +57,6 @@ class Greetings(commands.Cog):
                 toRemove = []
                 toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R5.value))
                 toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R4.value))
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_804_R5.value))
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_804_R4.value))
                 toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R3.value))
                 toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R2.value))
                 toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R1.value))
@@ -94,19 +92,9 @@ class Greetings(commands.Cog):
             result.append(
                 discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R5.value)
             )
-            result.append(
-                discord.utils.get(
-                    message.author.guild.roles, name=Roles.ROLE_804_R5.value
-                )
-            )
         elif rank == "4":
             result.append(
                 discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R4.value)
-            )
-            result.append(
-                discord.utils.get(
-                    message.author.guild.roles, name=Roles.ROLE_804_R4.value
-                )
             )
         elif rank == "3":
             result.append(
@@ -155,12 +143,13 @@ class Greetings(commands.Cog):
     def parseTag(self, tokenList: List[str]) -> str:
         #search for len token 3 or 5
         goodCandidates = [token for token in tokenList if len(token) == 3 and token.isupper()]
+        okayishCandidates = [token for token in tokenList if len(token) == 3 and token[0].isupper() and token[1].islower() and token[2].isupper()]
         decentCandidates = [token for token in tokenList if len(token) == 5]
         betterCandidates = []
         for candidate in decentCandidates:
             if candidate[0] == '(' or candidate[0] == '[' or candidate[0] == '{' or candidate[0] == '<':
                 betterCandidates.append(candidate)
-        bestCandidates = goodCandidates + betterCandidates
+        bestCandidates = goodCandidates + betterCandidates + okayishCandidates
         if len(bestCandidates) > 0:
             return bestCandidates[0]
         else: 
