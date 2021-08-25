@@ -22,7 +22,7 @@ class Greetings(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        roleMember = discord.utils.get(member.guild.roles, name=Roles.ROLE_MEMBER.value)
+        roleMember = discord.utils.get(member.guild.roles, id=Roles.ROLE_VISITOR.value)
         await member.add_roles(roleMember)
 
     @commands.Cog.listener()
@@ -33,8 +33,9 @@ class Greetings(commands.Cog):
         if staffRole != None:
             isMod = True
 
-        
-        if  channel.name == "general" and message.author.bot == False or channel.name == "bot-test" and message.author.bot == False and isMod == False    or   channel.name == "🔖membership-request" and message.author.bot == False and isMod == False :
+        # or channel.name == "bot-test" and message.author.bot == False and isMod == False
+        # line is for debugging purpose
+        if  channel.name == "general" and message.author.bot == False     or   channel.name == "🔖membership-request" and message.author.bot == False and isMod == False :
             emojiAccepted = "✅"
             emojiRejected = "❌"
             content = message.content
@@ -43,11 +44,7 @@ class Greetings(commands.Cog):
                 tokens = self.tokenize(content, message.author)
                 # roles
                 roles = []
-                roles.append(
-                    discord.utils.get(
-                        message.author.guild.roles, name=Roles.ROLE_804.value
-                    )
-                )
+    
                 moreRoles = self.matchRole(tokens[2], message)
                 allRoles = roles + moreRoles
                 # name and tag
@@ -55,13 +52,13 @@ class Greetings(commands.Cog):
                 await message.author.edit(nick=targetName)
                 # clear roles first hotfix
                 toRemove = []
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R5.value))
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R4.value))
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_804_R5.value))
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_804_R4.value))
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R3.value))
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R2.value))
-                toRemove.append(discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R1.value))
+                toRemove.append(discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R5.value))
+                toRemove.append(discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R4.value))
+                toRemove.append(discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R3.value))
+                toRemove.append(discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R2.value))
+                toRemove.append(discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R1.value))
+                toRemove.append(discord.utils.get(message.author.guild.roles, id=Roles.ROLE_VISITOR.value))
+
                 for role in toRemove:
                     await message.author.remove_roles(role)
 
@@ -92,33 +89,23 @@ class Greetings(commands.Cog):
         rank = token[-1]
         if rank == "5":
             result.append(
-                discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R5.value)
-            )
-            result.append(
-                discord.utils.get(
-                    message.author.guild.roles, name=Roles.ROLE_804_R5.value
-                )
+                discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R5.value)
             )
         elif rank == "4":
             result.append(
-                discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R4.value)
-            )
-            result.append(
-                discord.utils.get(
-                    message.author.guild.roles, name=Roles.ROLE_804_R4.value
-                )
+                discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R4.value)
             )
         elif rank == "3":
             result.append(
-                discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R3.value)
+                discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R3.value)
             )
         elif rank == "2":
             result.append(
-                discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R2.value)
+                discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R2.value)
             )
         else:
             result.append(
-                discord.utils.get(message.author.guild.roles, name=Roles.ROLE_R1.value)
+                discord.utils.get(message.author.guild.roles, id=Roles.ROLE_R1.value)
             )
         return result
 
@@ -175,6 +162,26 @@ class Greetings(commands.Cog):
         else: 
             raise TokenizeException('Cannot resolve Rank.')
 
+
+
+
+    @commands.command()
+    async def member(self, ctx):
+        if ctx.channel.id == Channels.TEST.value:
+            role = discord.utils.get(ctx.guild.roles, id=Roles.ROLE_VISITOR.value)  
+            members = self.bot.get_all_members()
+            for member in members:
+                if len(member.roles) < 2: 
+                    await member.add_roles(role)
+
+    @commands.command()
+    async def roles(self, ctx):
+        if ctx.channel.id == Channels.TEST.value:
+            roles = ctx.guild.roles
+            print(roles)
+        
+
+                
 
 
 
